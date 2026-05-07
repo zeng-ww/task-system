@@ -7,7 +7,9 @@ import com.example.teamtasksystem.dto.RegisterRequest;
 
 public interface AuthService {
 
+    // 注册
     Result<Void> register(RegisterRequest request);
 
+    // 登录
     Result<LoginResponse> login(LoginRequest request);
 }
