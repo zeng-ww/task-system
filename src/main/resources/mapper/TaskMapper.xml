@@ -5,43 +5,61 @@
 
 <mapper namespace="com.example.teamtasksystem.mapper.TaskMapper">
 
-    <insert id="insert" parameterType="Task" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO task(project_id, title, description, priority, status, deadline,
-        creator_id, assignee_id, create_time, update_time)
-        VALUES (#{projectId}, #{title}, #{description}, #{priority}, #{status}, #{deadline},
-        #{creatorId}, #{assigneeId}, NOW(), NOW())
+    <!-- 新增任务 -->
+    <insert id="insert"
+            parameterType="com.example.teamtasksystem.entity.Task"
+            useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO task ( project_id, title, description, priority,
+        status, deadline, creator_id, assignee_id, create_time, update_time )
+        VALUES ( #{projectId}, #{title}, #{description}, #{priority},
+        #{status}, #{deadline}, #{creatorId}, #{assigneeId}, NOW(), NOW() )
     </insert>
 
-    <select id="selectById" resultType="Task">
-        SELECT id, project_id, title, description, priority, status, deadline,
-        creator_id, assignee_id, create_time, update_time
-        FROM task
-        WHERE id = #{id}
+    <!-- 根据任务ID查询任务 -->
+    <select id="selectById"
+            resultType="com.example.teamtasksystem.entity.Task">
+        SELECT id, project_id AS projectId, title, description,
+        priority, status, deadline, creator_id AS creatorId,
+        assignee_id AS assigneeId, create_time AS createTime,
+        update_time AS updateTime FROM task WHERE id = #{id}
     </select>
 
-    <select id="selectByCondition" resultType="Task">
-        SELECT id, project_id, title, description, priority, status, deadline,
-        creator_id, assignee_id, create_time, update_time
+    <!-- 查询任务列表：支持按项目、状态、优先级筛选 -->
+    <select id="selectList"
+            resultType="com.example.teamtasksystem.entity.Task">
+        SELECT id, project_id AS projectId, title, description,
+        priority, status, deadline, creator_id AS creatorId,
+        assignee_id AS assigneeId, create_time AS createTime, update_time AS updateTime
         FROM task
         WHERE project_id = #{projectId}
+
         <if test="status != null and status != ''">
             AND status = #{status}
         </if>
+
         <if test="priority != null and priority != ''">
             AND priority = #{priority}
         </if>
+
         ORDER BY create_time DESC
     </select>
 
+    <!-- 更新任务状态 -->
     <update id="updateStatus">
         UPDATE task
-        SET status = #{status}, update_time = NOW()
+        SET
+        status = #{status},
+        update_time = NOW()
         WHERE id = #{id}
     </update>
 
+    <!-- 指派任务 -->
     <update id="updateAssignee">
         UPDATE task
-        SET assignee_id = #{assigneeId}, update_time = NOW()
+        SET
+        assignee_id = #{assigneeId},
+        update_time = NOW()
         WHERE id = #{id}
     </update>
 
