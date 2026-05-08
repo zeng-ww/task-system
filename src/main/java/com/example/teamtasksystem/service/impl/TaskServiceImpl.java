@@ -1,12 +1,10 @@
 package com.example.teamtasksystem.service.impl;
 
-import com.example.teamtasksystem.dto.TaskAssignRequest;
-import com.example.teamtasksystem.dto.TaskCreateRequest;
-import com.example.teamtasksystem.dto.TaskResponse;
-import com.example.teamtasksystem.dto.TaskStatusUpdateRequest;
+import com.example.teamtasksystem.dto.*;
 import com.example.teamtasksystem.entity.Task;
 import com.example.teamtasksystem.enums.TaskStatusEnum;
 import com.example.teamtasksystem.mapper.TaskMapper;
+import com.example.teamtasksystem.mapper.UserMapper;
 import com.example.teamtasksystem.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +16,8 @@ import java.util.List;
 public class TaskServiceImpl implements TaskService {
 
     private final TaskMapper taskMapper;
+
+    private final UserMapper userMapper;
 
     /**
      * 创建任务
@@ -61,8 +61,13 @@ public class TaskServiceImpl implements TaskService {
      * @param request 任务状态更新请求
      */
     @Override
-    public void updateStatus(TaskStatusUpdateRequest request) {
-        taskMapper.updateStatus(request.getTaskId(), request.getStatus());
+    public void updateStatus(Long id, TaskStatusUpdateRequest request) {
+        Task task = taskMapper.selectById(id);
+        if (task == null) {
+            throw new RuntimeException("任务不存在");
+        }
+
+        taskMapper.updateStatus(id, request.getStatus());
     }
 
     /**
@@ -70,9 +75,15 @@ public class TaskServiceImpl implements TaskService {
      *
      * @param request 任务指派请求
      */
+// TaskServiceImpl.java
     @Override
-    public void assignTask(TaskAssignRequest request) {
-        taskMapper.updateAssignee(request.getTaskId(), request.getAssigneeId());
+    public void assignTask(Long id, TaskAssignRequest request) {
+        Task task = taskMapper.selectById(id);
+        if (task == null) {
+            throw new RuntimeException("任务不存在");
+        }
+
+        taskMapper.assignTask(id, request.getAssigneeId());
     }
 
     /**
@@ -95,5 +106,40 @@ public class TaskServiceImpl implements TaskService {
         response.setCreateTime(task.getCreateTime());
         response.setUpdateTime(task.getUpdateTime());
         return response;
+    }
+
+    /**
+     * 删除任务
+     *
+     * @param taskId 任务ID
+     */
+    @Override
+    public void deleteTask(Long id) {
+        if (taskMapper.selectById(id) == null) {
+            throw new RuntimeException("任务不存在");
+        }
+
+        taskMapper.deleteById(id);
+    }
+
+    @Override
+    public void updateTask(Long id, TaskUpdateRequest request) {
+        Task task = taskMapper.selectById(id);
+        if (task == null) {
+            throw new RuntimeException("任务不存在");
+        }
+
+        if (request.getAssigneeId() != null && userMapper.selectById(request.getAssigneeId()) == null) {
+            throw new RuntimeException("指派用户不存在");
+        }
+
+        task.setId(id);
+        task.setTitle(request.getTitle());
+        task.setDescription(request.getDescription());
+        task.setPriority(request.getPriority());
+        task.setDeadline(request.getDeadline());
+        task.setAssigneeId(request.getAssigneeId());
+
+        taskMapper.updateById(task);
     }
 }

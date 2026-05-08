@@ -22,4 +22,20 @@
         ORDER BY create_time DESC
     </select>
 
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM project WHERE id = #{projectId}
+    </delete>
+
+    <delete id="deleteByProjectId" parameterType="long">
+        DELETE FROM task WHERE project_id = #{projectId}
+    </delete>
+
+    <update id="updateById">
+        UPDATE project
+        SET name = #{name},
+        description = #{description},
+        update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
 </mapper>

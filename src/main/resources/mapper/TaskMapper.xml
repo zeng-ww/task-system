@@ -55,9 +55,27 @@
     </update>
 
     <!-- 指派任务 -->
-    <update id="updateAssignee">
+    <update id="assignTask">
         UPDATE task
-        SET
+        SET assignee_id = #{assigneeId}, update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM task WHERE id = #{taskId}
+    </delete>
+
+    <delete id="deleteByProjectId">
+        DELETE FROM task
+        WHERE project_id = #{projectId}
+    </delete>
+
+    <update id="updateById">
+        UPDATE task
+        SET title = #{title},
+        description = #{description},
+        priority = #{priority},
+        deadline = #{deadline},
         assignee_id = #{assigneeId},
         update_time = NOW()
         WHERE id = #{id}

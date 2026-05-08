@@ -2,10 +2,7 @@ package com.example.teamtasksystem.controller;
 
 import com.example.teamtasksystem.common.Result;
 import com.example.teamtasksystem.config.JwtAuthenticationFilter;
-import com.example.teamtasksystem.dto.TaskAssignRequest;
-import com.example.teamtasksystem.dto.TaskCreateRequest;
-import com.example.teamtasksystem.dto.TaskResponse;
-import com.example.teamtasksystem.dto.TaskStatusUpdateRequest;
+import com.example.teamtasksystem.dto.*;
 import com.example.teamtasksystem.service.TaskService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -59,9 +56,10 @@ public class TaskController {
      * @param request 状态更新请求
      * @return 更新结果
      */
-    @PutMapping("/status")
-    public Result<Void> updateStatus(@RequestBody @Valid TaskStatusUpdateRequest request) {
-        taskService.updateStatus(request);
+    @PutMapping("/{id}/status")
+    public Result<Void> updateStatus(@PathVariable Long id,
+                                     @RequestBody @Valid TaskStatusUpdateRequest request) {
+        taskService.updateStatus(id, request);
         return Result.success();
     }
 
@@ -71,9 +69,25 @@ public class TaskController {
      * @param request 指派请求
      * @return 指派结果
      */
-    @PutMapping("/assign")
-    public Result<Void> assignTask(@RequestBody @Valid TaskAssignRequest request) {
-        taskService.assignTask(request);
+// TaskController.java
+    @PutMapping("/{id}/assign")
+    public Result<Void> assignTask(@PathVariable Long id,
+                                   @RequestBody @Valid TaskAssignRequest request) {
+        taskService.assignTask(id, request);
         return Result.success();
     }
+
+    @DeleteMapping("/{taskId}")
+    public Result<Void> deleteTask(@PathVariable Long taskId) {
+        taskService.deleteTask(taskId);
+        return Result.success();
+    }
+
+    @PutMapping("/{id}")
+    public Result<Void> updateTask(@PathVariable Long id,
+                                   @RequestBody @Valid TaskUpdateRequest request) {
+        taskService.updateTask(id, request);
+        return Result.success();
+    }
+
 }

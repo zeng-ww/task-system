@@ -1,9 +1,6 @@
 package com.example.teamtasksystem.service;
 
-import com.example.teamtasksystem.dto.TaskAssignRequest;
-import com.example.teamtasksystem.dto.TaskCreateRequest;
-import com.example.teamtasksystem.dto.TaskResponse;
-import com.example.teamtasksystem.dto.TaskStatusUpdateRequest;
+import com.example.teamtasksystem.dto.*;
 
 import java.util.List;
 
@@ -13,7 +10,11 @@ public interface TaskService {
 
     List<TaskResponse> listTasks(Long projectId, String status, String priority);
 
-    void updateStatus(TaskStatusUpdateRequest request);
+    void updateStatus(Long id, TaskStatusUpdateRequest request);
 
-    void assignTask(TaskAssignRequest request);
+    void assignTask(Long id, TaskAssignRequest request);
+
+    void deleteTask(Long taskId);
+
+    void updateTask(Long id, TaskUpdateRequest request);
 }

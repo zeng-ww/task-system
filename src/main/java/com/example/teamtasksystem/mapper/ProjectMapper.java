@@ -14,4 +14,10 @@ public interface ProjectMapper {
 
     // 查询所有项目
     List<Project> selectAll();
+
+    // 根据id删除项目
+    int deleteById(Long id);
+
+    // 根据id更新项目
+    int updateById(Project project);
 }

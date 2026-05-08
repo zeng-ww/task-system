@@ -24,8 +24,12 @@ public interface TaskMapper {
             @Param("status") String status
     );
 
-    int updateAssignee(
-            @Param("id") Long id,
-            @Param("assigneeId") Long assigneeId
-    );
+    // TaskMapper.java
+    int assignTask(@Param("id") Long id, @Param("assigneeId") Long assigneeId);
+
+    int deleteById(Long id);
+
+    int deleteByProjectId(Long projectId);
+
+    int updateById(Task task);
 }
