@@ -35,6 +35,61 @@
 
 ---
 
+## 快速开始
+
+### 1. 克隆仓库
+
+```bash
+git clone https://github.com/zeng-ww/task-system.git
+cd task-system
+```
+### 2. 配置数据库
+
+- 创建数据库：
+```
+CREATE DATABASE task_system DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+```
+- 执行初始化 SQL：
+```
+mysql -u root -p task_system < sql/init.sql
+```
+- 修改数据库配置
+```
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/task_system?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 你的数据库密码
+ ```
+### 3. 启动后端
+后端接口地址：
+http://localhost:8080
+---
+
+## 项目结构
+
+### 后端结构（Spring Boot）
+
+```
+team-task-system/
+├── src/
+│   ├── main/
+│   │   ├── java/com/example/teamtasksystem/
+│   │   │   ├── controller/      # 控制器层，处理 HTTP 请求
+│   │   │   ├── dto/             # 数据传输对象
+│   │   │   ├── entity/          # 实体类（数据库映射）
+│   │   │   ├── mapper/          # MyBatis Mapper 接口
+│   │   │   ├── service/         # 业务逻辑接口
+│   │   │   ├── service/impl/    # 业务逻辑实现
+│   │   │   └── common/          # 公共工具、返回结果类、分页封装等
+│   │   └── resources/
+│   │       ├── mapper/          # MyBatis XML 映射文件
+│   │       ├── application.yml  # 配置文件
+│   │       └── sql/             # 初始化数据库脚本 init.sql
+├── pom.xml                        # Maven 配置文件
+└── README.md                       # 项目说明文档
+```
+
 ## 数据库设计
 
 ### 用户表（sys_user）
@@ -106,6 +161,7 @@
 | /api/tasks/{id}/assign   | PUT  | 指派任务                        |
 | /api/tasks/{id}          | DELETE | 删除任务                        |
 
+---
 ## 功能说明
 ### 用户模块
 - 用户注册：用户名、密码、昵称、邮箱
