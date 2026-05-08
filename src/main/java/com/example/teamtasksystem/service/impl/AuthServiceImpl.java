@@ -1,5 +1,6 @@
 package com.example.teamtasksystem.service.impl;
 
+import com.example.teamtasksystem.common.JwtUtil;
 import com.example.teamtasksystem.common.Result;
 import com.example.teamtasksystem.dto.LoginRequest;
 import com.example.teamtasksystem.dto.LoginResponse;
@@ -18,6 +19,8 @@ public class AuthServiceImpl implements AuthService {
     private final UserMapper userMapper;
 
     private final PasswordEncoder passwordEncoder;
+
+    private final JwtUtil jwtUtil;
 
     // 注册, 用户名不能重复
     @Override
@@ -53,7 +56,9 @@ public class AuthServiceImpl implements AuthService {
             return Result.error(400, "用户名或密码错误");
         }
 
+        String token = jwtUtil.generateToken(user.getId(), user.getUsername());
         LoginResponse response = new LoginResponse(
+                token,
                 user.getId(),
                 user.getUsername(),
                 user.getNickname()

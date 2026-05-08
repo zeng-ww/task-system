@@ -14,3 +14,7 @@ mybatis:
   type-aliases-package: com.example.teamtasksystem.entity
   configuration:
     map-underscore-to-camel-case: true
+
+jwt:
+  secret: team-task-system-jwt-secret-key-please-change-it-123456
+  expire-time: 86400000 # 24 hours

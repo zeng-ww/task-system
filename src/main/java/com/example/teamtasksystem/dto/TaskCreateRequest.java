@@ -25,8 +25,6 @@ public class TaskCreateRequest {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime deadline;
 
-    @NotNull(message = "创建者ID不能为空")
-    private Long creatorId;
 
     private Long assigneeId;
 }

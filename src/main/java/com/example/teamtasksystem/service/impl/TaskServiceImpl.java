@@ -25,19 +25,18 @@ public class TaskServiceImpl implements TaskService {
      * @param request 任务创建请求
      */
     @Override
-    public void createTask(TaskCreateRequest request) {
+    public void createTask(TaskCreateRequest request, Long currentUserId) {
+
+
         Task task = new Task();
         task.setProjectId(request.getProjectId());
         task.setTitle(request.getTitle());
         task.setDescription(request.getDescription());
         task.setPriority(request.getPriority());
+        task.setStatus("TODO");
         task.setDeadline(request.getDeadline());
-        task.setCreatorId(request.getCreatorId());
+        task.setCreatorId(currentUserId);
         task.setAssigneeId(request.getAssigneeId());
-
-        // 新建任务默认是待处理状态
-        task.setStatus(TaskStatusEnum.TODO.name());
-
         taskMapper.insert(task);
     }
 

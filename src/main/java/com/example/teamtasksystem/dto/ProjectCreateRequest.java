@@ -11,5 +11,4 @@ public class ProjectCreateRequest {
 
     private String description;
 
-    private Long creatorId;
 }

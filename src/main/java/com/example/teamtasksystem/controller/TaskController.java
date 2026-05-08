@@ -1,11 +1,13 @@
 package com.example.teamtasksystem.controller;
 
 import com.example.teamtasksystem.common.Result;
+import com.example.teamtasksystem.config.JwtAuthenticationFilter;
 import com.example.teamtasksystem.dto.TaskAssignRequest;
 import com.example.teamtasksystem.dto.TaskCreateRequest;
 import com.example.teamtasksystem.dto.TaskResponse;
 import com.example.teamtasksystem.dto.TaskStatusUpdateRequest;
 import com.example.teamtasksystem.service.TaskService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +28,10 @@ public class TaskController {
      * @return 创建结果
      */
     @PostMapping
-    public Result<Void> createTask(@RequestBody @Valid TaskCreateRequest request) {
-        taskService.createTask(request);
+    public Result<Void> createTask(@RequestBody @Valid TaskCreateRequest request,
+                                   HttpServletRequest httpServletRequest) {
+        Long currentUserId = (Long) httpServletRequest.getAttribute(JwtAuthenticationFilter.CURRENT_USER_ID);
+        taskService.createTask(request, currentUserId);
         return Result.success();
     }
 

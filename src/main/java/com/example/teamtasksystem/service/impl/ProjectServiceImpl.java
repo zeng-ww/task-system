@@ -27,19 +27,19 @@ public class ProjectServiceImpl implements ProjectService {
      * @return 创建结果
      */
     @Override
-    public Result<Void> createProject(ProjectCreateRequest request) {
-        if (request.getCreatorId() == null) {
-            return Result.error(400, "创建者ID不能为空");
+    public Result<Void> createProject(ProjectCreateRequest request, Long currentUserId) {
+        if (currentUserId == null) {
+            return Result.error(401, "请先登录");
         }
 
-        if (userMapper.selectById(request.getCreatorId()) == null) {
-            return Result.error(404, "创建者不存在");
+        if (userMapper.selectById(currentUserId) == null) {
+            return Result.error(404, "当前用户不存在");
         }
 
         Project project = new Project();
         project.setName(request.getName());
         project.setDescription(request.getDescription());
-        project.setCreatorId(request.getCreatorId());
+        project.setCreatorId(currentUserId);
 
         projectMapper.insert(project);
 
